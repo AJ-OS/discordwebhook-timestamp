@@ -3,8 +3,8 @@ package discordwebhook
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
-	"io/ioutil"
+	"errors"
+	"io"
 	"net/http"
 )
 
@@ -24,12 +24,12 @@ func SendMessage(url string, message Message) error {
 	if resp.StatusCode != 200 && resp.StatusCode != 204 {
 		defer resp.Body.Close()
 
-		responseBody, err := ioutil.ReadAll(resp.Body)
+		responseBody, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return err
 		}
 
-		return fmt.Errorf(string(responseBody))
+		return errors.New(string(responseBody))
 	}
 
 	return nil
